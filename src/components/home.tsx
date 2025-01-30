@@ -28,6 +28,7 @@ interface HomeProps {
   }) => void;
   onAddCategory?: (data: { name: string; budget: number }) => void;
   onSortExpenses?: (column: "date" | "amount") => void;
+  onDeleteExpense?: (id: string) => void;
 }
 
 const Home = ({
@@ -38,8 +39,11 @@ const Home = ({
   categories,
   expenses,
   onAddExpense = () => {},
-  onAddCategory = () => {},
+  onAddCategory = (data: { name: string; budget: number }) => {
+    console.log("Adding category:", data);
+  },
   onSortExpenses = () => {},
+  onDeleteExpense = () => {},
 }: HomeProps) => {
   return (
     <div className="min-h-screen bg-gray-100 p-6 space-y-6">
@@ -56,9 +60,13 @@ const Home = ({
           onAddCategory={onAddCategory}
         />
 
-        <ExpenseList expenses={expenses} onSort={onSortExpenses} />
+        <ExpenseList
+          expenses={expenses}
+          onSort={onSortExpenses}
+          onDelete={onDeleteExpense}
+        />
 
-        <QuickAddExpense onSubmit={onAddExpense} />
+        <QuickAddExpense categories={categories} onSubmit={onAddExpense} />
       </div>
     </div>
   );

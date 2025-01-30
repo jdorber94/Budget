@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Button } from "./ui/button";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Trash2 } from "lucide-react";
 
 interface Expense {
   id: string;
@@ -28,6 +28,7 @@ interface Expense {
 interface ExpenseListProps {
   expenses?: Expense[];
   onSort?: (column: "date" | "amount") => void;
+  onDelete?: (id: string) => void;
 }
 
 const ExpenseList = ({
@@ -39,6 +40,7 @@ const ExpenseList = ({
     { id: "5", date: "2024-03-05", category: "Utilities", amount: 150.0 },
   ],
   onSort = () => {},
+  onDelete = () => {},
 }: ExpenseListProps) => {
   return (
     <Card className="w-full bg-white">
@@ -85,6 +87,7 @@ const ExpenseList = ({
                   <ArrowUpDown className="h-4 w-4" />
                 </Button>
               </TableHead>
+              <TableHead className="w-[100px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -95,6 +98,17 @@ const ExpenseList = ({
                 </TableCell>
                 <TableCell>{expense.category}</TableCell>
                 <TableCell>${expense.amount.toFixed(2)}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50"
+                    onClick={() => onDelete(expense.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    <span className="sr-only">Delete expense</span>
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

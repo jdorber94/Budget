@@ -24,13 +24,22 @@ import { cn } from "../lib/utils";
 
 interface QuickAddExpenseProps {
   open?: boolean;
+  categories?: Array<{ category: string }>;
   onSubmit?: (data: { amount: number; category: string; date: Date }) => void;
 }
 
 const QuickAddExpense = ({
-  open = true,
+  open = false,
+  categories = [
+    { category: "Food & Dining" },
+    { category: "Transportation" },
+    { category: "Entertainment" },
+    { category: "Shopping" },
+    { category: "Utilities" },
+  ],
   onSubmit = () => {},
 }: QuickAddExpenseProps) => {
+  const [isOpen, setIsOpen] = React.useState(false);
   const [amount, setAmount] = React.useState("");
   const [category, setCategory] = React.useState("");
   const [date, setDate] = React.useState<Date>(new Date());
@@ -42,13 +51,18 @@ const QuickAddExpense = ({
       category,
       date,
     });
+    setIsOpen(false);
+    setAmount("");
+    setCategory("");
+    setDate(new Date());
   };
 
   return (
-    <Dialog open={open}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="fixed bottom-6 right-6 rounded-full w-14 h-14 shadow-lg">
+        <Button className="fixed bottom-6 right-6 rounded-full w-14 h-14 shadow-lg bg-green-600 hover:bg-green-700">
           <Plus className="h-6 w-6" />
+          <span className="sr-only">Add Expense</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] bg-white">
@@ -75,11 +89,11 @@ const QuickAddExpense = ({
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="food">Food & Dining</SelectItem>
-                <SelectItem value="transportation">Transportation</SelectItem>
-                <SelectItem value="utilities">Utilities</SelectItem>
-                <SelectItem value="entertainment">Entertainment</SelectItem>
-                <SelectItem value="shopping">Shopping</SelectItem>
+                {categories.map((cat) => (
+                  <SelectItem key={cat.category} value={cat.category}>
+                    {cat.category}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

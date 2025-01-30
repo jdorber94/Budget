@@ -59,14 +59,20 @@ const BudgetCategories = ({
   const [newCategoryName, setNewCategoryName] = React.useState("");
   const [newCategoryBudget, setNewCategoryBudget] = React.useState("");
 
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!newCategoryName || !newCategoryBudget) return;
+
     onAddCategory({
       name: newCategoryName,
       budget: parseFloat(newCategoryBudget),
     });
+
     setNewCategoryName("");
     setNewCategoryBudget("");
+    setDialogOpen(false);
   };
 
   return (
@@ -75,7 +81,7 @@ const BudgetCategories = ({
         <h2 className="text-2xl font-semibold text-gray-900">
           Budget Categories
         </h2>
-        <Dialog>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button>
               <Plus className="h-4 w-4 mr-2" />
